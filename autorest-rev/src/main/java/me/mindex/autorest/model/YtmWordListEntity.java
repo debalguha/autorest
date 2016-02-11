@@ -10,17 +10,26 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
 @Entity
 @Table(name = "ytm_word_list")
+@Indexed
 public class YtmWordListEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer ywlId;
+	private Long ywlId;
 	private String word;
+	@Field(store = Store.YES, analyze = Analyze.NO)
 	private Boolean isComplete;
+	@Field(store = Store.YES, analyze = Analyze.NO)
 	private Boolean isWorking;
 	@Temporal(TemporalType.TIMESTAMP)
+	@Field(store = Store.YES, analyze = Analyze.NO)
 	private Date lastDate;
 
 	public YtmWordListEntity() {
@@ -39,12 +48,20 @@ public class YtmWordListEntity {
 		this.isWorking = isWorking;
 		this.lastDate = lastDate;
 	}
+	
+	public YtmWordListEntity(Long id, String word, boolean isComplete, boolean isWorking, Date lastDate) {
+		this.ywlId = id;
+		this.word = word;
+		this.isComplete = isComplete;
+		this.isWorking = isWorking;
+		this.lastDate = lastDate;
+	}
 
-	public Integer getYwlId() {
+	public Long getYwlId() {
 		return this.ywlId;
 	}
 
-	public void setYwlId(Integer ywlId) {
+	public void setYwlId(Long ywlId) {
 		this.ywlId = ywlId;
 	}
 

@@ -22,7 +22,7 @@ public class WordListController {
 	}
 	
 	@RequestMapping(value = "wordcompleted", method = RequestMethod.GET)
-	public @ResponseBody String wordCompleted(@RequestParam("ywlId") Integer word){
+	public @ResponseBody String wordCompleted(@RequestParam("ywlId") Long word){
 		return wordListService.wordCompleted(word)!=null?"0":"ERROR";
 	}
 	

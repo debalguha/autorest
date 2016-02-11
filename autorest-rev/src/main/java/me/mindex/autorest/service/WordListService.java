@@ -65,7 +65,7 @@ public class WordListService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public YtmWordListEntity wordCompleted(Integer ywId) {
+	public YtmWordListEntity wordCompleted(Long ywId) {
 		YtmWordListEntity aWord = wordListRepo.findOne(ywId);
 		aWord.setComplete(true);
 		aWord.setWorking(false);
