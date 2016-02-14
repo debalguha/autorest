@@ -41,7 +41,6 @@ public class WordListServiceTest {
 	}*/
 
 	@Test
-	@Ignore
 	public void shouldBeAbleToGetOneAvailableWord() throws Exception {
 		Assert.assertNotNull(wordListService.getOneAvailableWord());
 	}
