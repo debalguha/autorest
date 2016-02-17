@@ -60,13 +60,20 @@ public class CacheFacade implements InitializingBean {
 	}
 
 	public void reloadCache() throws Exception {
-		cacheLock.writeLock().lock();
-		try {
-			cache.removeAll();
-			reloadCache();
-		} finally {
-			cacheLock.writeLock().unlock();
-		}
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				cacheLock.writeLock().lock();
+				try {
+					cache.removeAll();
+					reloadCache();
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					cacheLock.writeLock().unlock();
+				}
+			}
+		}).start();
 	}
 
 	private void loadCache() throws Exception {

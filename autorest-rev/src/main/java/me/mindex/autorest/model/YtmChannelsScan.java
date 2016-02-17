@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "ytm_channels_scan")
 public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
@@ -19,6 +21,7 @@ public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
 	@Id
 	private String channelId;
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date entryDate;
 	private String scanHistory;
 	private boolean scanComplete;

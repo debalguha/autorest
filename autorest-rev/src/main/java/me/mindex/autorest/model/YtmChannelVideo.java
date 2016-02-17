@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "ytm_channel_videos")
 public class YtmChannelVideo {
@@ -27,6 +29,7 @@ public class YtmChannelVideo {
     private String videoJson;
 	@Column(name = "EntryDate")
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date entryDate;
 	@Column(name = "VideoID")
     private String videoId;

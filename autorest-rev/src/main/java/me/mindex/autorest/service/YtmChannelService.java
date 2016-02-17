@@ -3,11 +3,6 @@ package me.mindex.autorest.service;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import me.mindex.autorest.model.YtmChannelsScan;
-import me.mindex.autorest.persistence.repo.YtmChannelVideoRepo;
-import me.mindex.autorest.persistence.repo.YtmChannelsScanRepo;
-import me.mindex.autorest.service.predicate.PredicateSpecFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -15,14 +10,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import me.mindex.autorest.model.YtmChannelsScan;
+import me.mindex.autorest.persistence.repo.YtmChannelsScanRepo;
+import me.mindex.autorest.service.predicate.PredicateSpecFactory;
+
 @Service("channelService")
 @Qualifier("channelService")
 @Transactional
 public class YtmChannelService {
 	@Autowired
 	private YtmChannelsScanRepo channelRepo;
-	@Autowired
-	private YtmChannelVideoRepo videoRepo;
 	@Transactional(readOnly = true)
 	public Collection<String> getAllChannelIds() {
 		return channelRepo.findAll().stream().map(YtmChannelsScan::getChannelId).collect(Collectors.toList());

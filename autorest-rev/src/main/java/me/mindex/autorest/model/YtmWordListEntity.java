@@ -14,6 +14,7 @@ import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "ytm_word_list")
@@ -30,6 +31,7 @@ public class YtmWordListEntity {
 	private Boolean isWorking;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Field(store = Store.YES, analyze = Analyze.NO)
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date lastDate;
 
 	public YtmWordListEntity() {
