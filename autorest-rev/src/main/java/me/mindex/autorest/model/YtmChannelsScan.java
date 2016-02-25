@@ -14,6 +14,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ytm_channels_scan")
 public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
@@ -23,6 +25,17 @@ public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date entryDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "MM/dd/yyyy")
+	private Date lastUpdated;
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
+	}
+
 	private String scanHistory;
 	private boolean scanComplete;
 	private short providerId;
@@ -35,13 +48,19 @@ public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
 	private Long viewCount;
 	private Integer subscriberCount;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "channel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<YtmChannelVideo> videos;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	@OneToMany(mappedBy = "channel", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<TblVideos> tblVideos;
 
 	public YtmChannelsScan() {
+	}
+	
+	public YtmChannelsScan(String channelId) {
+		this.channelId = channelId;
 	}
 
 	public YtmChannelsScan(String channelId, Date entryDate, boolean scanComplete, short providerId, boolean isWorking) {
@@ -171,7 +190,7 @@ public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
 	public void setSubscriberCount(Integer subscriberCount) {
 		this.subscriberCount = subscriberCount;
 	}
-
+	@JsonIgnore
 	public Set<YtmChannelVideo> getVideos() {
 		return videos;
 	}
@@ -179,7 +198,7 @@ public class YtmChannelsScan  implements Comparable<YtmChannelsScan>{
 	public void setVideos(Set<YtmChannelVideo> videos) {
 		this.videos = videos;
 	}
-
+	@JsonIgnore
 	public Set<TblVideos> getTblVideos() {
 		return tblVideos;
 	}

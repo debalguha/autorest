@@ -3,8 +3,8 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-  <display-name>Archetype Created Web Application</display-name>
-  	<context-param>
+	<display-name>Archetype Created Web Application</display-name>
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:applicationContext.xml
         </param-value>
@@ -22,6 +22,16 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	<filter>
+		<filter-name>GzipFilter</filter-name>
+		<filter-class>me.mindex.autorest.web.compress.filter.GZipServletFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>GzipFilter</filter-name>
+		<url-pattern>/AutoScanner/videosCode</url-pattern>
+		<url-pattern>/AutoScanner/channelList</url-pattern>
+	</filter-mapping>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

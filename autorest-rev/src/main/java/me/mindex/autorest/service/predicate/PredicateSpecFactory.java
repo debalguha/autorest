@@ -1,5 +1,7 @@
 package me.mindex.autorest.service.predicate;
 
+import java.util.Date;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -45,6 +47,15 @@ public class PredicateSpecFactory {
 		return new Specification<YtmChannelsScan>() {
 			public Predicate toPredicate(Root<YtmChannelsScan> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				return cb.greaterThan(root.<Integer> get(YtmChannelsScan_.videosCount), videoCount);
+			}
+		};
+	}
+	
+	public static Specification<YtmChannelsScan> buildLongWorkingChannelPredicateSpec(Date leastAllowedTime){
+		return new Specification<YtmChannelsScan>() {
+			public Predicate toPredicate(Root<YtmChannelsScan> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.and(cb.lessThan(root.<Date> get(YtmChannelsScan_.lastUpdated), leastAllowedTime), cb.equal(root.<Boolean> get(YtmChannelsScan_.scanComplete), Boolean.FALSE), 
+						cb.equal(root.<Boolean> get(YtmChannelsScan_.isWorking), Boolean.TRUE));
 			}
 		};
 	}

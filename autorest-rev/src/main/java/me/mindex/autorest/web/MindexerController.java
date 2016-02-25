@@ -40,12 +40,26 @@ public class MindexerController {
 	
 	@RequestMapping(value = "generalanalytics", method = RequestMethod.GET)
 	public @ResponseBody List<Map<?, ?>> generateAnalytics(@RequestParam("typeid") int type){
-		return type==1?videoService.getYearLyVideoStatistics():videoService.getCategoricalVideoUploads();
+		switch(type){
+		case 1:
+			return videoService.getYearLyVideoStatistics();
+		default :
+			return videoService.getCategoricalVideoUploads();
+		}
 	}
 	
 	@RequestMapping(value = "getchannels", method = RequestMethod.GET)
 	public @ResponseBody Collection<YtmChannelsScan> getChannels(@RequestParam("typeid") int type){
-		return type==-1?sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0)):type==100?sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0)):type==500?sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0)):sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0));
+		switch(type){
+		case 1 : 
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0));
+		case 100 :
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(100));
+		case 500 :
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(500));
+		default :
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(1000));
+		}
 	}
 	
 	@RequestMapping(value = "getchannelsvideo", method = RequestMethod.GET)

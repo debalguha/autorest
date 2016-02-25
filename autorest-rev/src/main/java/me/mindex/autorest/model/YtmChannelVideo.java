@@ -39,6 +39,21 @@ public class YtmChannelVideo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ChannelID", nullable = false)
     private YtmChannelsScan channel;
+    
+	public YtmChannelVideo() {
+		super();
+	}
+
+	public YtmChannelVideo(short providerId, String videoJson, Date entryDate, String videoId, String searchTerm,
+			YtmChannelsScan channel) {
+		super();
+		this.providerId = providerId;
+		this.videoJson = videoJson;
+		this.entryDate = entryDate;
+		this.videoId = videoId;
+		this.searchTerm = searchTerm;
+		this.channel = channel;
+	}
 
 	public Long getId() {
 		return id;

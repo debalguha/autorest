@@ -1,6 +1,8 @@
 package me.mindex.autorest.service;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import me.mindex.autorest.model.YtmChannelsScan;
+import me.mindex.autorest.persistence.repo.TblVideoRepo;
+import me.mindex.autorest.persistence.repo.YtmChannelVideoRepo;
 import me.mindex.autorest.persistence.repo.YtmChannelsScanRepo;
 import me.mindex.autorest.service.predicate.PredicateSpecFactory;
 
@@ -20,9 +24,18 @@ import me.mindex.autorest.service.predicate.PredicateSpecFactory;
 public class YtmChannelService {
 	@Autowired
 	private YtmChannelsScanRepo channelRepo;
+	@Autowired
+	private TblVideoRepo tblVideoRepo;
+	@Autowired
+	private YtmChannelVideoRepo channelVideoRepo;
 	@Transactional(readOnly = true)
 	public Collection<String> getAllChannelIds() {
 		return channelRepo.findAll().stream().map(YtmChannelsScan::getChannelId).collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public YtmChannelsScan findById(String channelId){
+		return channelRepo.findOne(channelId);
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
@@ -44,7 +57,16 @@ public class YtmChannelService {
 		YtmChannelsScan channelsScan = channelRepo.findOne(channelId);
 		channelsScan.setScanComplete(true);
 		channelsScan.setIsWorking(false);
+		channelsScan.setVideosCount(channelVideoRepo.videoCountForChannel(channelsScan)+tblVideoRepo.videoCountForChannel(channelsScan));
 		return saveChannel(channelsScan);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public boolean updateLongWorkingChannelsToAvailable(Date leastAllowedTime){
+		List<YtmChannelsScan> longRunning = channelRepo.findAll(PredicateSpecFactory.buildLongWorkingChannelPredicateSpec(leastAllowedTime));
+		longRunning.forEach(c -> c.setIsWorking(false));
+		channelRepo.save(longRunning);
+		return true;
 	}
 	
 	

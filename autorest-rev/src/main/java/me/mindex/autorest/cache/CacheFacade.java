@@ -34,7 +34,7 @@ public class CacheFacade implements InitializingBean {
 		cacheLock.readLock().lock();
 		try {
 			Date now = new DateTime().minusMinutes(21).toDate();
-			Query query = cache.createQuery().addCriteria(cache.getSearchAttribute("isComplete").eq(Boolean.FALSE).or(cache.getSearchAttribute("isWorking").eq(Boolean.TRUE).and(cache.getSearchAttribute("isWorking").le(now))));
+			Query query = cache.createQuery().addCriteria(cache.getSearchAttribute("isComplete").eq(Boolean.FALSE).or(cache.getSearchAttribute("isWorking").eq(Boolean.TRUE).and(cache.getSearchAttribute("lastDate").le(now))));
 			query.maxResults(1);
 			query.includeValues();
 			YtmWordListEntity entity = (YtmWordListEntity) query.execute().all().iterator().next().getValue();
@@ -56,7 +56,7 @@ public class CacheFacade implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		loadCache();
+		//loadCache();
 	}
 
 	public void reloadCache() throws Exception {

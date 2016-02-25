@@ -59,12 +59,11 @@ public class WordListService {
 
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public YtmWordListEntity getOneAvailableWordFromCache() throws Exception {
 		YtmWordListEntity aWord = facade.getAWord();
 		aWord.setWorking(true);
 		aWord.setLastDate(new Date());
-		wordListRepo.save(aWord);
+		facade.putAWord(aWord);
 		return aWord;
 	}
 
