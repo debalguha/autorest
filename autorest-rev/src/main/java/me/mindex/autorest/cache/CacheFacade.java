@@ -56,7 +56,7 @@ public class CacheFacade implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		//loadCache();
+		loadCache();
 	}
 
 	public void reloadCache() throws Exception {
