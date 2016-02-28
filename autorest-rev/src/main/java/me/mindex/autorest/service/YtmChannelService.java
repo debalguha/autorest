@@ -48,6 +48,7 @@ public class YtmChannelService {
 		YtmChannelsScan channel = channelRepo.findAll(PredicateSpecFactory.buildAvailableChannelSpec(), new PageRequest(1, 1)).getContent().iterator().next();
 		channel.setIsWorking(true);
 		channel.setScanComplete(false);
+		channel.setLastUpdated(new Date());
 		saveChannel(channel);
 		return channel;
 	}
@@ -58,6 +59,7 @@ public class YtmChannelService {
 		channelsScan.setScanComplete(true);
 		channelsScan.setIsWorking(false);
 		channelsScan.setVideosCount(channelVideoRepo.videoCountForChannel(channelsScan)+tblVideoRepo.videoCountForChannel(channelsScan));
+		channelsScan.setLastUpdated(new Date());
 		return saveChannel(channelsScan);
 	}
 	
