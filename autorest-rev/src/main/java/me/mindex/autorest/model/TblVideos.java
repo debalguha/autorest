@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,6 +38,7 @@ public class TblVideos {
     @Column(name="VideoTitle")
     private String videoTitle;
 
+    @Lob
     @Column(name="VideoDescription")
     private String videoDescription;
 
@@ -69,7 +71,8 @@ public class TblVideos {
     @Temporal(TemporalType.TIMESTAMP)
     private Date videoUploadedDate;
 
-    @Column(name="VideoTags")
+    @Column(name="VideoTags", columnDefinition = "TEXT")
+    @Lob
     private String videoTags;
 
     @Column(name="SearchTerm")

@@ -2,15 +2,10 @@ package me.mindex.autorest.web;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import me.mindex.autorest.model.YtmChannelVideo;
-import me.mindex.autorest.model.YtmChannelsScan;
-import me.mindex.autorest.model.YtmRegexTemplate;
-import me.mindex.autorest.service.RegexService;
-import me.mindex.autorest.service.VideoService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,9 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import me.mindex.autorest.model.YtmChannelVideo;
+import me.mindex.autorest.model.YtmChannelsScan;
+import me.mindex.autorest.model.YtmRegexTemplate;
+import me.mindex.autorest.service.RegexService;
+import me.mindex.autorest.service.VideoService;
+
 @Controller
 @RequestMapping("mindexer")
 public class MindexerController {
+	private static final Logger LOG = LoggerFactory.getLogger(MindexerController.class);
 	@Autowired
 	private RegexService service;
 	
@@ -39,7 +41,7 @@ public class MindexerController {
 	}
 	
 	@RequestMapping(value = "generalanalytics", method = RequestMethod.GET)
-	public @ResponseBody List<Map<?, ?>> generateAnalytics(@RequestParam("typeid") int type){
+	public @ResponseBody List<Object[]> generateAnalytics(@RequestParam("typeid") int type){
 		switch(type){
 		case 1:
 			return videoService.getYearLyVideoStatistics();
@@ -51,14 +53,14 @@ public class MindexerController {
 	@RequestMapping(value = "getchannels", method = RequestMethod.GET)
 	public @ResponseBody Collection<YtmChannelsScan> getChannels(@RequestParam("typeid") int type){
 		switch(type){
-		case 1 : 
+		case -1 : 
 			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(0));
 		case 100 :
-			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(100));
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountLE(100));
 		case 500 :
-			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(500));
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountLE(500));
 		default :
-			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountGT(1000));
+			return sortByVideoCountDesc(videoService.getChannelsWithVideoCountLE(1000));
 		}
 	}
 	
@@ -79,6 +81,7 @@ public class MindexerController {
 
 	@ExceptionHandler(Throwable.class)
 	public @ResponseBody ServiceStatus handleException(Throwable t){
+		LOG.error("Failed http request", t);
 		return ServiceStatus.FAILURE;
 	}
 }

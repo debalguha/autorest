@@ -29,22 +29,21 @@ public class ChannelControllerTestWithHttp extends AbstractBaseHttpTest {
 	@Test
 	public void shouldBeAbleToFetchAllChannelIds() throws Exception {
 		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
-			HttpClientBuilder.create().addInterceptorFirst(new HttpRequestInterceptor() {
+				HttpClientBuilder.create().addInterceptorFirst(new HttpRequestInterceptor() {
 
-				public void process(final HttpRequest request, final HttpContext context)
-						throws HttpException, IOException {
-					if (!request.containsHeader("Accept-Encoding")) {
-						request.addHeader("Accept-Encoding", "gzip");
+					public void process(final HttpRequest request, final HttpContext context)
+							throws HttpException, IOException {
+						if (!request.containsHeader("Accept-Encoding")) {
+							request.addHeader("Accept-Encoding", "gzip");
+						}
 					}
-				}
 
-			}
-		).build());
+				}).build());
 		List<String> channelIds = createRestTemplateWithHttpClientFactory(clientHttpRequestFactory)
-			.exchange(buildURL("AutoScanner/channelList"), HttpMethod.GET, null,
-					new ParameterizedTypeReference<List<String>>() {
-					})
-			.getBody();
+				.exchange(buildURL("AutoScanner/channelList"), HttpMethod.GET, null,
+						new ParameterizedTypeReference<List<String>>() {
+						})
+				.getBody();
 		assertFalse(CollectionUtils.isEmpty(channelIds));
 	}
 
