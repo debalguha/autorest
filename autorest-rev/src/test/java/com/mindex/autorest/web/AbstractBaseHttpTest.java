@@ -1,4 +1,4 @@
-package com.mindex.autorest.service;
+package com.mindex.autorest.web;
 
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
