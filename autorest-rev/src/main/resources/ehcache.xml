@@ -8,6 +8,7 @@
 			<searchAttribute name="isWorking" expression="value.isIsWorking()"/>
 			<searchAttribute name="isComplete" expression="value.isIsComplete()"/>
 			<searchAttribute name="lastDate" expression="value.getLastDate()"/>
+			<searchAttribute name="lastTimeStamp" expression="value.getLastTimeStamp()"/>
 		</searchable>
 		<!-- <persistence strategy="localTempSwap" /> -->
 	</cache>

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
@@ -33,6 +34,13 @@ public class YtmWordListEntity {
 	@Field(store = Store.YES, analyze = Analyze.NO)
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private Date lastDate;
+	
+	@Transient
+	private Long lastTimeStamp;
+
+	public Long getLastTimeStamp() {
+		return lastTimeStamp;
+	}
 
 	public YtmWordListEntity() {
 	}
@@ -41,14 +49,14 @@ public class YtmWordListEntity {
 		this.word = word;
 		this.isComplete = isComplete;
 		this.isWorking = isWorking;
-		this.lastDate = new Date();
+		setLastDate(new Date());
 	}
 
 	public YtmWordListEntity(String word, boolean isComplete, boolean isWorking, Date lastDate) {
 		this.word = word;
 		this.isComplete = isComplete;
 		this.isWorking = isWorking;
-		this.lastDate = lastDate;
+		setLastDate(lastDate);
 	}
 	
 	public YtmWordListEntity(Long id, String word, boolean isComplete, boolean isWorking, Date lastDate) {
@@ -56,7 +64,7 @@ public class YtmWordListEntity {
 		this.word = word;
 		this.isComplete = isComplete;
 		this.isWorking = isWorking;
-		this.lastDate = lastDate;
+		setLastDate(lastDate);
 	}
 
 	public Long getYwlId() {
@@ -97,6 +105,7 @@ public class YtmWordListEntity {
 
 	public void setLastDate(Date lastDate) {
 		this.lastDate = lastDate;
+		this.lastTimeStamp = lastDate==null?0:lastDate.getTime();
 	}
 
 	public boolean isComplete() {
@@ -142,7 +151,8 @@ public class YtmWordListEntity {
 
 	@Override
 	public String toString() {
-		return "YtmWordList [ywlId=" + ywlId + ", word=" + word + ", isComplete=" + isComplete + ", isWorking=" + isWorking + ", lastDate=" + lastDate + "]";
+		return "YtmWordListEntity [ywlId=" + ywlId + ", word=" + word + ", isComplete=" + isComplete + ", isWorking="
+				+ isWorking + ", lastDate=" + lastDate + ", lastTimeStamp=" + lastTimeStamp + "]";
 	}
 
 }

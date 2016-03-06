@@ -34,6 +34,11 @@ public class WordListService {
 	private CacheFacade facade;
 
 	private static final Logger LOG = LoggerFactory.getLogger(WordListService.class);
+	public WordListService(){}
+	public WordListService(CacheFacade facade) {
+		super();
+		this.facade = facade;
+	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public YtmWordListEntity saveAWord(YtmWordListEntity ytmWordList) {
@@ -60,9 +65,11 @@ public class WordListService {
 	}
 
 	public YtmWordListEntity getOneAvailableWordFromCache() throws Exception {
+		Date now = new Date();
+		System.out.println("Updating to "+now);
 		YtmWordListEntity aWord = facade.getAWord();
 		aWord.setWorking(true);
-		aWord.setLastDate(new Date());
+		aWord.setLastDate(now);
 		facade.putAWord(aWord);
 		return aWord;
 	}
@@ -99,7 +106,7 @@ public class WordListService {
 	@Transactional(readOnly = true)
 	public void populateCachePageByPage(Cache cache) {
 		long total = wordListRepo.count();
-		int pageSize = 10000;
+		int pageSize = 50000;
 		long loopCount = total % pageSize == 0 ? total / pageSize : (new Double(Math.floor(total / pageSize)).longValue() + 1);
 		for (int i = 0; i < loopCount; i++) {
 			cache.putAll(wordListRepo.findAll(new PageRequest(i + 1, pageSize)).getContent().stream().map(new Function<YtmWordListEntity, Element>() {
