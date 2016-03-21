@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -31,9 +32,11 @@ public abstract class AbstractBaseHttpTest {
 
 	private void setMessageConverter(RestTemplate restTemplate) {
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+		StringHttpMessageConverter stringConv = new StringHttpMessageConverter();
 		MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
 		jsonMessageConverter.setObjectMapper(getObjectMapper());
 		messageConverters.add(jsonMessageConverter);
+		messageConverters.add(stringConv);
 		restTemplate.setMessageConverters(messageConverters);
 	}
 
